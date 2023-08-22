@@ -32,6 +32,7 @@ public class SmackOptions {
         AccountManager accountManager = AccountManager.getInstance(connection);
         accountManager.sensitiveOperationOverInsecureConnection(true);
         accountManager.createAccount(Localpart.fromOrThrowUnchecked(username), password);
+        System.out.println("Registrado");
     }
 
     // 2) Iniciar sesión con una cuenta
@@ -54,10 +55,9 @@ public class SmackOptions {
     // 1) Mostrar todos los usuarios/contactos y su estado
     public void showAllContacts() {
         Roster roster = Roster.getInstanceFor(connection);
-        System.out.println("Here");
         for (RosterEntry entry : roster.getEntries()) {
             Presence presence = roster.getPresence(entry.getJid());
-            System.out.println(entry.getJid() + " - " + presence.getStatus());
+            System.out.println("- " + entry.getJid() + " - " + presence.getStatus());
         }
     }
 
@@ -65,6 +65,15 @@ public class SmackOptions {
     public void addContact(BareJid userJid, String name) throws Exception {
         Roster roster = Roster.getInstanceFor(connection);
         roster.createEntry(userJid, name, null);
+        Presence subscribe = new Presence(Presence.Type.subscribe);
+        subscribe.setTo(userJid);
+        connection.sendStanza(subscribe);
+        roster.reloadAndWait();
+        if (roster.getEntry(userJid) != null) {
+            System.out.println("Contacto agregado satisfactoriamente");
+        } else {
+            System.out.println("Fallo al agregar el contacto");
+        }
     }
 
     // 3) Mostrar detalles de contacto de un usuario

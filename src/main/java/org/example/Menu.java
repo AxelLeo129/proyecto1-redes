@@ -15,18 +15,60 @@ public class Menu {
         boolean validateOption = false;
         Scanner sc = new Scanner(System.in);
         int version = 0;
+        int authVersion = 0;
         boolean run = true;
+        boolean sessionStarted = false;
         SmackOptions example = new SmackOptions();
         example.initializeAndConnect("alumchat.xyz", "alumchat.xyz");
-        String[] options = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
 
         System.out.println("Axel Leonardo López 20768");
         System.out.println("Bienvenido al proyecto 1 de Redes");
 
         while(run) {
             System.out.println("Selecciona una opción:");
+            while (!sessionStarted) {
+                while (!validateOption) {
+                    System.out.println("1. Registro\n2. Inicio de sesión:");
+                    try {
+                        authVersion = Integer.parseInt(sc.next());
+                        if (authVersion == 1 || authVersion == 2)
+                            validateOption = true;
+                        else
+                            System.out.println("Ingrese una opción válida\n");
+                    } catch (Exception e) {
+                        System.out.println("Ingrese una opción válida\n");
+                    }
+                }
+                validateOption = false;
+
+                switch (authVersion) {
+                    case 1:
+                        System.out.println("Ingrese el nombre del usuario:");
+                        String name = sc.next();
+                        System.out.println("Ingrese la contraseña:");
+                        String password = sc.next();
+                        example.registerAccount(name, password);
+                        break;
+                    case 2:
+                        try {
+                            System.out.println("Ingrese el nombre del usuario:");
+                            String user = sc.next();
+                            System.out.println("Ingrese la contraseña:");
+                            String password1 = sc.next();
+                            example.login(user, password1);
+                            sessionStarted = true;
+                        } catch (Exception e) {
+                            System.out.println("Ingresa las credenciales correctas.");
+                        }
+                        break;
+                    default:
+                        System.out.println("Número inválido. Debe estar entre 1 y 2.");
+                        break;
+                }
+            }
+
             while (!validateOption) {
-                System.out.println("1. Registro\n2. Inicio de sesión\n3. Cerrar sesión\n4. Eliminar cuenta\n5. Mostrar usuarios\n6. Agregar usuario a contactos\n7. Mostar detalles de un contacto\n8. Comunicación 1 a 1\n9. Conversación grupal\n10. Definir mensaje de presencia\n11: Enviar/Recibir notificaciones\n12. Enviar y recibir archivos:");
+                System.out.println("3. Cerrar sesión\n4. Eliminar cuenta\n5. Mostrar usuarios\n6. Agregar usuario a contactos\n7. Mostar detalles de un contacto\n8. Comunicación 1 a 1\n9. Conversación grupal\n10. Definir mensaje de presencia\n11: Enviar/Recibir notificaciones\n12. Enviar y recibir archivos:");
                 try {
                     version = Integer.parseInt(sc.next());
                     if (version == 1 || version == 2 || version == 3 || version == 4 || version == 5 || version == 6 || version == 7 || version == 8 || version == 9 || version == 10 || version == 11 || version == 12)
@@ -39,29 +81,13 @@ public class Menu {
             }
             validateOption = false;
             switch (version) {
-                case 1:
-                    System.out.println("Ingrese el nombre del usuario:");
-                    String name = sc.next();
-                    System.out.println("Ingrese la contraseña:");
-                    String password = sc.next();
-                    example.registerAccount(name, password);
-                    break;
-                case 2:
-                    try {
-                        System.out.println("Ingrese el nombre del usuario:");
-                        String user = sc.next();
-                        System.out.println("Ingrese la contraseña:");
-                        String password1 = sc.next();
-                        example.login(user, password1);
-                    } catch (SaslException e) {
-                        System.out.println("Ingresa las credenciales correctas.");
-                    }
-                    break;
                 case 3:
                     example.logout();
+                    sessionStarted = false;
                     break;
                 case 4:
                     example.deleteAccount();
+                    sessionStarted = false;
                     break;
                 case 5:
                     example.showAllContacts();
