@@ -1,6 +1,7 @@
 package org.example;
 
 import org.jivesoftware.smack.AbstractXMPPConnection;
+import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.chat2.Chat;
 import org.jivesoftware.smack.chat2.ChatManager;
 import org.jivesoftware.smack.packet.Presence;
@@ -29,12 +30,14 @@ public class SmackOptions {
     // 1) Registrar una nueva cuenta en el servidor
     public void registerAccount(String username, String password) throws Exception {
         AccountManager accountManager = AccountManager.getInstance(connection);
+        accountManager.sensitiveOperationOverInsecureConnection(true);
         accountManager.createAccount(Localpart.fromOrThrowUnchecked(username), password);
     }
 
     // 2) Iniciar sesión con una cuenta
     public void login(String username, String password) throws Exception {
         connection.login(username, password);
+        System.out.println("Logged in");
     }
 
     // 3) Cerrar sesión con una cuenta
@@ -51,6 +54,7 @@ public class SmackOptions {
     // 1) Mostrar todos los usuarios/contactos y su estado
     public void showAllContacts() {
         Roster roster = Roster.getInstanceFor(connection);
+        System.out.println("Here");
         for (RosterEntry entry : roster.getEntries()) {
             Presence presence = roster.getPresence(entry.getJid());
             System.out.println(entry.getJid() + " - " + presence.getStatus());
@@ -105,6 +109,8 @@ public class SmackOptions {
         XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()
                 .setHost(host)
                 .setXmppDomain(domain)
+                .setPort(5222)
+                .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
                 .build();
         connection = new XMPPTCPConnection(config);
         try {
