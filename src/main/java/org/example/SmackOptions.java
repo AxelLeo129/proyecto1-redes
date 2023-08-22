@@ -115,6 +115,10 @@ public class SmackOptions {
         connection = new XMPPTCPConnection(config);
         try {
             connection.connect();
+            ChatManager chatManager = ChatManager.getInstanceFor(connection);
+            chatManager.addIncomingListener((from, message, chat) -> {
+                System.out.println("Nuevo mensaje de " + from + ": " + message.getBody());
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
