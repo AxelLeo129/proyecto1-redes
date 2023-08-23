@@ -101,14 +101,14 @@ public class Menu {
                 case 7:
                     System.out.println("Ingrese el nombre de usuario:");
                     String userName1 = sc.next();
-                    example.showContactDetails(userName1);
+                    example.showContactDetails(userName1 + "@alumchat.xyz");
                     break;
                 case 8:
                     System.out.println("Ingrese el nombre de usuario:");
                     String userName2 = sc.next();
                     System.out.println("Ingrese el mensaje:");
                     String message = sc.next();
-                    example.sendMessageToOne(userName2, message);
+                    example.sendMessageToOne(userName2 + "@alumchat.xyz", message);
                     break;
                 case 9:
                     System.out.println("Ingrese el su nickname:");

@@ -80,7 +80,11 @@ public class SmackOptions {
     public void showContactDetails(String userJid) throws XmppStringprepException {
         Roster roster = Roster.getInstanceFor(connection);
         RosterEntry entry = roster.getEntry(JidCreate.bareFrom(userJid));
-        System.out.println(entry.getJid() + " - " + entry.getName());
+        if (entry != null) {
+            System.out.println(entry.getJid() + " - " + entry.getName());
+        } else {
+            System.out.println("No se encontró el contacto con JID: " + userJid);
+        }
     }
 
     // 4) Comunicación 1 a 1 con cualquier usuario/contacto
