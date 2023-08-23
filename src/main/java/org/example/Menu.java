@@ -78,7 +78,7 @@ public class Menu {
             }
 
             while (!validateOption) {
-                System.out.println("3. Cerrar sesión\n4. Eliminar cuenta\n5. Mostrar usuarios\n6. Agregar usuario a contactos\n7. Mostar detalles de un contacto\n8. Comunicación 1 a 1\n9. Conversación grupal\n10. Definir mensaje de presencia\n11: Enviar/Recibir notificaciones\n12. Enviar y recibir archivos:");
+                System.out.println("3. Cerrar sesión\n4. Eliminar cuenta\n5. Mostrar usuarios\n6. Agregar usuario a contactos\n7. Mostar detalles de un contacto\n8. Comunicación 1 a 1\n9. Conversación grupal\n10. Definir mensaje de presencia\n11: Recibir notificaciones\n12. Enviar y recibir archivos:");
                 try {
                     version = Integer.parseInt(sc.next());
                     if (version == 1 || version == 2 || version == 3 || version == 4 || version == 5 || version == 6 || version == 7 || version == 8 || version == 9 || version == 10 || version == 11 || version == 12)
@@ -131,6 +131,9 @@ public class Menu {
                     System.out.println("Ingrese el mensaje:");
                     String message1 = sc.next();
                     example.setPresenceMessage(message1);
+                    break;
+                case 11:
+                    System.out.println("Listen messages...");
                     break;
                 case 12:
                     System.out.println("Ingrese el userId:");
