@@ -23,11 +23,20 @@ import org.jxmpp.stringprep.XmppStringprepException;
 
 import java.io.File;
 
+/**
+ * The SmackOptions class provides methods to interact with an XMPP server using the Smack library.
+ */
 public class SmackOptions {
 
     private AbstractXMPPConnection connection;
 
-    // 1) Registrar una nueva cuenta en el servidor
+    /**
+     * Registers a new account on the XMPP server.
+     *
+     * @param username Desired username for the new account.
+     * @param password Password for the new account.
+     * @throws Exception if there's an error during registration.
+     */
     public void registerAccount(String username, String password) throws Exception {
         AccountManager accountManager = AccountManager.getInstance(connection);
         accountManager.sensitiveOperationOverInsecureConnection(true);
@@ -35,24 +44,38 @@ public class SmackOptions {
         System.out.println("Registrado");
     }
 
-    // 2) Iniciar sesión con una cuenta
+    /**
+     * Logs in to the XMPP server using the provided credentials.
+     *
+     * @param username Username of the account.
+     * @param password Password of the account.
+     * @throws Exception if there's an error during login.
+     */
     public void login(String username, String password) throws Exception {
         connection.login(username, password);
         System.out.println("Logged in");
     }
 
-    // 3) Cerrar sesión con una cuenta
+    /**
+     * Logs out from the XMPP server.
+     */
     public void logout() {
         connection.disconnect();
     }
 
-    // 4) Eliminar la cuenta del servidor
+    /**
+     * Deletes the account from the XMPP server.
+     *
+     * @throws Exception if there's an error during account deletion.
+     */
     public void deleteAccount() throws Exception {
         AccountManager accountManager = AccountManager.getInstance(connection);
         accountManager.deleteAccount();
     }
 
-    // 1) Mostrar todos los usuarios/contactos y su estado
+    /**
+     * Displays all contacts and their status.
+     */
     public void showAllContacts() {
         Roster roster = Roster.getInstanceFor(connection);
         for (RosterEntry entry : roster.getEntries()) {
@@ -61,7 +84,13 @@ public class SmackOptions {
         }
     }
 
-    // 2) Agregar un usuario a los contactos
+    /**
+     * Adds a user to the contact list.
+     *
+     * @param userJid User's JID.
+     * @param name    Name to be displayed in the contact list.
+     * @throws Exception if there's an error during contact addition.
+     */
     public void addContact(BareJid userJid, String name) throws Exception {
         Roster roster = Roster.getInstanceFor(connection);
         roster.createEntry(userJid, name, null);
@@ -76,7 +105,12 @@ public class SmackOptions {
         }
     }
 
-    // 3) Mostrar detalles de contacto de un usuario
+    /**
+     * Displays details of a specific contact.
+     *
+     * @param userJid User's JID.
+     * @throws XmppStringprepException if there's an error related to XMPP string preparation.
+     */
     public void showContactDetails(String userJid) throws XmppStringprepException {
         Roster roster = Roster.getInstanceFor(connection);
         RosterEntry entry = roster.getEntry(JidCreate.bareFrom(userJid));
@@ -87,7 +121,13 @@ public class SmackOptions {
         }
     }
 
-    // 4) Comunicación 1 a 1 con cualquier usuario/contacto
+    /**
+     * Sends a one-to-one message to a user.
+     *
+     * @param userJid User's JID.
+     * @param message Message content.
+     * @throws Exception if there's an error during message sending.
+     */
     public void sendMessageToOne(String userJid, String message) throws Exception {
         ChatManager chatManager = ChatManager.getInstanceFor(connection);
         EntityBareJid jid = JidCreate.entityBareFrom(userJid);
@@ -95,29 +135,50 @@ public class SmackOptions {
         chat.send(message);
     }
 
-    // 5) Participar en conversaciones grupales
+    /**
+     * Sends a one-to-one message to a user.
+     *
+     * @param roomJid Room JID.
+     * @param nickname Nickname.
+     * @throws Exception if there's an error during message sending.
+     */
     public void joinGroupChat(String roomJid, String nickname) throws Exception {
         MultiUserChatManager mucManager = MultiUserChatManager.getInstanceFor(connection);
         MultiUserChat muc = mucManager.getMultiUserChat(JidCreate.entityBareFrom(roomJid));
         muc.join(Resourcepart.fromOrNull(nickname));
     }
 
-    // 6) Definir mensaje de presencia
+    /**
+     * Send presence message
+     *
+     * @param message Message content.
+     * @throws Exception if there's an error during message sending.
+     */
     public void setPresenceMessage(String message) throws Exception {
         Presence presence = new Presence(Presence.Type.available, message, 1, Presence.Mode.available);
         connection.sendStanza(presence);
     }
 
-    // 7) Enviar/recibir notificaciones (esto es similar a enviar/recibir mensajes)
-
-    // 8) Enviar/recibir archivos
+    /**
+     * Sends a one-to-one file to a user.
+     *
+     * @param userJid User's JID.
+     * @param file File.
+     * @throws Exception if there's an error during message sending.
+     */
     public void sendFile(String userJid, File file) throws Exception {
         FileTransferManager ftm = FileTransferManager.getInstanceFor(connection);
         OutgoingFileTransfer transfer = ftm.createOutgoingFileTransfer(JidCreate.entityFullFrom(userJid));
         transfer.sendFile(file, "Sending a file");
     }
 
-    // Inicializar y conectar
+    /**
+     * Create server connection.
+     *
+     * @param host String.
+     * @param domain String.
+     * @throws Exception if there's an error during message sending.
+     */
     public void initializeAndConnect(String host, String domain) throws XmppStringprepException {
         XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()
                 .setHost(host)

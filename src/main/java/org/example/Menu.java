@@ -3,14 +3,24 @@ package org.example;
 import org.jxmpp.jid.BareJid;
 import org.jxmpp.jid.impl.JidCreate;
 
-import javax.security.sasl.SaslException;
 import java.io.File;
 import java.util.Scanner;
 
+/**
+ * This class represents the main menu for the chat application.
+ */
 public class Menu {
 
+    /**
+     * Default constructor.
+     */
     public Menu() { }
 
+    /**
+     * Starts the main menu loop, allowing the user to interact with the chat application.
+     *
+     * @throws Exception if any error occurs during the execution.
+     */
     public void start() throws Exception {
         boolean validateOption = false;
         Scanner sc = new Scanner(System.in);
